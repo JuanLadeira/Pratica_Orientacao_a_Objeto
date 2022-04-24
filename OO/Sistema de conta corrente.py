@@ -29,7 +29,6 @@ class ContaCorrente:  # CRIAÇÃO DA CLASSE CONTA CORRENTE
             print(f'O valor de R${valor:,.2f} foi transferido com sucesso!!')
 
 
-
 if __name__ == '__main__':
     conta = ContaCorrente('Felipe', '111.222.333-55', 50)
     conta.depositar(100)
