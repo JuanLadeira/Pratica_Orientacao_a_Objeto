@@ -27,5 +27,5 @@ if __name__ == '__main__':
     conta.sacar(50)
     conta.consultar_saldo()
     conta2 = ContaCorrente('Fernando', '132.231.444-56')
-    conta.transferencia(30, conta2)
+    conta.transferencia(35, conta2)
     conta2.consultar_saldo()
