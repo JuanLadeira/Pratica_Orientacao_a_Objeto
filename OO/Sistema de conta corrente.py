@@ -6,7 +6,7 @@ class ContaCorrente:  # CRIAÇÃO DA CLASSE CONTA CORRENTE
         self.saldo = saldo
 
     def consultar_saldo(self):  # METODO PARA CONSULTAR SALDO
-        print(f'O saldo atual da conta inscrita sob o CPF:{self.cpf} é de R${self.saldo:.2f}')
+        print(f'O saldo atual da conta inscrita sob o CPF:{self.cpf} é de R${self.saldo:,.2f}')
         return self.saldo
 
     def depositar(self, valor):  # METODO PARA DEPOSITAR DINHEIRO
@@ -18,7 +18,7 @@ class ContaCorrente:  # CRIAÇÃO DA CLASSE CONTA CORRENTE
     def transferencia(self, valor, outra_conta):  # METODO PARA TRANSFERIR DINHEIRO PARA OUTRA CONTA
         self.saldo -= valor
         outra_conta.saldo = valor
-        print(f'O valor de R${valor:.2f} foi transferido com sucesso!!')
+        print(f'O valor de R${valor:,.2f} foi transferido com sucesso!!')
 
 
 if __name__ == '__main__':
