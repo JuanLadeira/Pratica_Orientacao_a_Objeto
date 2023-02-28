@@ -112,6 +112,7 @@ class ContaCorrente:  # CRIAÇÃO DA CLASSE CONTA CORRENTE
                   f'Data da transação: {transacao[2]}\n',
                   f'Valor da transação R${transacao[0]:,.2f}\n',
                   f'Saldo da conta: RS{transacao[1]:,.2f}')
+        
         ContaCorrente.linha()
 
 
