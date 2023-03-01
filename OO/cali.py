@@ -31,15 +31,12 @@ class Instrumento():
             incerteza_tipo_A = self.calcular_incerteza_da_repetitividade(i+1)
             print(f'Ponto {i+1}: média = {media:.2f}, desvio padrão = {desvio_padrao:.2f}, Ua = {incerteza_tipo_A:.2f}')
 
-    
-
-
 
 if __name__ == "__main__":
-    instrumento = Instrumento()
-    instrumento.adicionar_medicao(1, 19)
-    instrumento.adicionar_medicao(1, 20)
-    instrumento.adicionar_medicao(1, 20)
-    instrumento.exibir_resultados()
+    paquímetro = Instrumento()
+    paquímetro.adicionar_medicao(1, 19)
+    paquímetro.adicionar_medicao(1, 20)
+    paquímetro.adicionar_medicao(1, 20)
+    paquímetro.exibir_resultados()
 
 
