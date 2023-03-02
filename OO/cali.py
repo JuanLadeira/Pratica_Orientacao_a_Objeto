@@ -33,23 +33,32 @@ class Instrumento():
     def calcular_incerteza_da_resolucao(self):
         return self.resolucao/math.sqrt(3)
 
-    def calcular_incerteza_combinada(self):
-        incerteza_da_repetitividade = self.calcular_incerteza_da_repetitividade()
+    def calcular_incerteza_combinada(self, ponto):
+        incerteza_da_repetitividade = self.calcular_incerteza_da_repetitividade(ponto)
         incerteza_do_padrao = self.calcular_incerteza_do_padrao(1,2)
         incerteza_da_resolucao = self.calcular_incerteza_da_resolucao()
         incerteza_combinada = math.sqrt((incerteza_da_repetitividade**2)+(incerteza_do_padrao**2)+(incerteza_da_resolucao**2))
         return incerteza_combinada
         
-    def calcular_grau_de_liberdade(self):
-        incerteza_combinada = self.calcular_incerteza_combinada()
-        incerteza_repetitividade = self.calcular_incerteza_da_repetitividade()
-        grau_de_liberdade = incerteza_combinada**4/(incerteza_repetitividade/(len(self.medicoes_por_ponto)-1))
-        return grau_de_liberdade
+    def calcular_grau_de_liberdade(self, ponto):
+        incerteza_combinada = self.calcular_incerteza_combinada(ponto)
+        incerteza_repetitividade = self.calcular_incerteza_da_repetitividade(ponto)
+        n = len(self.medicoes_por_ponto[ponto-1])
+        return incerteza_combinada**4/(incerteza_repetitividade**4/(n-1))
 
-    def calcular_fator_de_abrangencia(self):
-        grau_de_liberdade = stats.t.cdf(2, 5)
-        p = stats.t.cdf(2, 5)
+    def calcular_fator_de_abrangencia(self, ponto):
+        grau_de_liberdade = self.calcular_grau_de_liberdade(ponto)
+        if grau_de_liberdade > 100:
+            fator_de_abrangencia = 2.00
+            return fator_de_abrangencia
+        fator_de_abrangencia = stats.t.cdf(1-0,9545, grau_de_liberdade)
+        return fator_de_abrangencia
 
+    def calcular_incerteza_expandida(self, ponto):
+        incerteza_combinada = self.calcular_incerteza_combinada(ponto)
+        fator_de_abrangencia = self.calcular_fator_de_abrangencia(ponto)
+        return incerteza_combinada * fator_de_abrangencia
+    
     def exibir_resultados(self):
         for i, medicoes in enumerate(self.medicoes_por_ponto):
             media = self.calcular_media(i+1)
@@ -57,13 +66,20 @@ class Instrumento():
             incerteza_tipo_A = self.calcular_incerteza_da_repetitividade(i+1)
             incerteza_resolucao = self.calcular_incerteza_da_resolucao()
             incerteza_do_padrao = self.calcular_incerteza_do_padrao(1,2)
-            print(f'Ponto {i+1}: média = {media:.2f}, desvio padrão = {desvio_padrao:.2f}, Ua = {incerteza_tipo_A:.2f}, Uresolução = {incerteza_resolucao:.2f}, uPadrão = {incerteza_do_padrao:.2f}')
-            print(f'-------------------------------------------------------------------------')
-            print(f'')
+            incerteza_combinada = self.calcular_incerteza_combinada(i+1)
+            fator_de_abrangencia = self.calcular_fator_de_abrangencia(i+1)
+            grau_de_liberdade = self.calcular_grau_de_liberdade(i+1)
+            incerteza_expandida = self.calcular_incerteza_expandida(i+1)
+            print(f'----------------------------RESULTADOS-----------------------------------')
+            print(f'Ponto {i+1}: média = {media:.2f}, desvio padrão = {desvio_padrao:.2f}')
+            print(f'----------------------------INCERTEZAS-----------------------------------')
+            print(f'Ua = {incerteza_tipo_A:.2f}, Uresolução = {incerteza_resolucao:.2f}, uPadrão = {incerteza_do_padrao:.2f}')
+            print(f'Ucombinada = {incerteza_combinada:.2f}, grau de liberdade = {grau_de_liberdade:.2f}, fator de abrangencia = {fator_de_abrangencia:.4f}')
+            print(f'Incerteza Expandida = {incerteza_expandida:.2f}')
 
 
 if __name__ == "__main__":
-    paquímetro = Instrumento()
+    paquímetro = Instrumento(faixa='0 a 150 mm', resolucao=0.1)
     paquímetro.adicionar_medicao(1, 19)
     paquímetro.adicionar_medicao(1, 20)
     paquímetro.adicionar_medicao(1, 20)
